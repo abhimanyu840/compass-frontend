@@ -34,11 +34,13 @@ const ProfilePage = () => {
                         <h2 className="text-xl font-semibold mb-4">User Information</h2>
                         <p>Name: {user.name}</p>
                         <p>Email: {user.email}</p>
+                        <p>Phone No.: {user.email}</p>
+                        <p>User Id: {user.userId}</p>
                         {/* Additional user information */}
                     </div>
-                    <UpdateProfileForm user={user} />
+                    {/* <UpdateProfileForm user={user} /> */}
                     <ChangePasswordForm />
-                    <OrderList orders={orders} />
+                    {/* <OrderList orders={orders} /> */}
                 </>
             )}
         </div>

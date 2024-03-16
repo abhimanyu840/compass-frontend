@@ -9,6 +9,12 @@ const ApiState = (props) => {
     const [signup, setSignup] = useState();
     const [fetchAllProduct, setFetchAllProduct] = useState([])
     const [addProduct, setAddProduct] = useState()
+    const [updateProduct, setUpdateProduct] = useState()
+    const [singleProduct, setSingleProduct] = useState(null)
+
+    const clearPreviousData = () => {
+        setSingleProduct(null)
+    }
 
     const getLogin = async (loginData) => {
         try {
@@ -62,8 +68,61 @@ const ApiState = (props) => {
         }
     }
 
+    const getUpdateProduct = async (formData, token, id) => {
+        // Check if the user is logged in
+        if (!token) {
+            throw new Error('Not Allowed');
+        }
+
+        const config = {
+            headers: {
+                'x-access-token': token
+            }
+        }
+
+        try {
+            const res = await axios.put(`${backendHost}/compass/api/v1/admin/products/update/${id}`, formData, config)
+            setUpdateProduct(res.data)
+        } catch (error) {
+            console.error('Updating Product failed:', error);
+            throw new Error('Oops! Updating Product failed');
+
+        }
+
+    }
+
+    const getSingleProduct = async (id) => {
+        try {
+            const res = await axios.get(`${backendHost}/compass/api/v1/products/${id}`);
+            setSingleProduct(res.data);
+        } catch (error) {
+            console.error('Fetching Product failed:', error);
+            throw new Error('Oops! Fetching Product failed');
+        }
+    }
+
+    const deleteProduct = async (id, token) => {
+        if (!token) {
+            throw new Error('Not Allowed');
+        }
+
+        const config = {
+            headers: {
+                'x-access-token': token
+            }
+        }
+        try {
+            await axios.delete(`${process.env.REACT_APP_BACKEND_HOST}/compass/api/v1/admin/products/delete/${id}`, config)
+
+        } catch (error) {
+            console.error('Deleting Product failed:', error);
+            throw new Error('Oops! Deleting Product failed');
+
+        }
+    }
+
     return (
-        <apiContext.Provider value={{ login, signup, fetchAllProduct, addProduct, getLogin, getSignup, getFetchAllProduct, getAddProduct }}>
+        <apiContext.Provider value={{ login, signup, fetchAllProduct, addProduct, singleProduct, getLogin, getSignup, getFetchAllProduct, getAddProduct, getUpdateProduct, getSingleProduct, deleteProduct, clearPreviousData }}>
             {props.children}
         </apiContext.Provider>
     );

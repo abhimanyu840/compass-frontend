@@ -32,12 +32,6 @@ const Home = () => {
 
                 <div className="flex flex-wrap items-center justify-center">
                     <Card />
-                    <Card />
-                    <Card />
-                    <Card />
-                    <Card />
-                    <Card />
-                    <Card />
                 </div>
 
             </div>

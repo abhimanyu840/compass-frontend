@@ -1,20 +1,32 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate  } from 'react-router-dom';
+import React, { useState, useEffect, useContext } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import apiContext from '../context/apiContext';
+import { toast } from 'react-toastify';
+import axios from 'axios';
 
 const UpdateProduct = () => {
+    const token = localStorage.getItem('accessToken');
+    const context = useContext(apiContext);
+    const { singleProduct, getSingleProduct, getUpdateProduct, clearPreviousData } = context
     const { id } = useParams(); // Get the id from the URL params
-    const navigate = useNavigate (); // Access history object to redirect after update
+    const navigate = useNavigate(); // Access history object to redirect after update
 
-    const [product, setProduct] = useState({
-        name: "",
-        description: "",
-        type: "course",
-        price: "",
-        duration: "",
-        startDate: "",
-        endDate: "",
-        imageUrl: ""
-    });
+    const [product, setProduct] = useState(null); // Initialize product state as null
+
+
+    useEffect(() => {
+        // Fetch the existing product details and set the state
+        const fetchProduct = async () => {
+            try {
+                let res = await axios.get(`${process.env.REACT_APP_BACKEND_HOST}/compass/api/v1/products/${id}`)
+                setProduct(res.data); // Update product state with fetched data
+            } catch (error) {
+                console.error('Error fetching product:', error);
+            }
+        };
+
+        fetchProduct();
+    }, [id]);
 
     // Function to handle input changes
     const handleChange = (e) => {
@@ -29,27 +41,24 @@ const UpdateProduct = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            // Send updated product data to backend for update
-            const response = await fetch(`/api/products/${id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(product)
-            });
-            if (!response.ok) {
-                throw new Error('Failed to update product');
-            }
+            await getUpdateProduct(product, token, id);
+            toast.success('Updated Successfully');
             // Redirect to product details page after successful update
-            navigate(`/products/${id}`);
+            navigate(`/admin/dashboard/allproducts`);
         } catch (error) {
             console.error('Error updating product:', error);
         }
     };
 
+    // Render loading state if product is still loading
+    if (!product) {
+        return <div>Loading...</div>;
+    }
+
+    // Render form once product is fetched
     return (
-        <div className="container mx-auto px-4 py-8">
-            <h2 className="text-3xl font-semibold mb-4">Update Product/Event</h2>
+        <div className="container mx-auto px-4 py-8 font-poppins">
+            <h2 className="text-3xl font-semibold mb-4 font-madimi-one underline text-green-700 text-center">Update Product/Event</h2>
             <form onSubmit={handleSubmit} className="max-w-md mx-auto">
                 <div className="mb-4">
                     <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>

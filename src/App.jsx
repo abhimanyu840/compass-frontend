@@ -9,8 +9,9 @@ import OrdersPage from './components/admin/Orderspage'
 import ProductListPage from './components/admin/ProductEventlistpage'
 import AddProductPage from './components/admin/Addproduct'
 import UpdateProduct from './components/admin/Updateproductevent'
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ProfilePage from './components/consumer/Profilepage'
 
 function App() {
 
@@ -33,6 +34,7 @@ function App() {
         <Route path='/admin/dashboard/addproducts' element={<><Dashboard /><AddProductPage /></>} />
         {/* update product  */}
         <Route path='/admin/dashboard/updateproducts/:id' element={<><UpdateProduct /></>} />
+        <Route path='/profile' element={<><ProfilePage /></>} />
       </Routes>
     </>
   )

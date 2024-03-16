@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import apiContext from './context/apiContext';
 
 const Login = () => {
+    const backendHost = `${process.env.REACT_APP_BACKEND_HOST}`;
     const context = useContext(apiContext);
     const { getLogin, login } = context;
     const navigate = useNavigate();
@@ -22,8 +23,8 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await getLogin(loginData);
-            const accessToken = login?.accessToken; // Add a check for login
+            let res = await axios.post(`${backendHost}/compass/api/v1/auth/signin`, loginData);
+            const accessToken = res.data?.accessToken; // Add a check for login
             if (accessToken) {
                 localStorage.setItem('accessToken', accessToken);
                 toast.success('Logged In successfully');

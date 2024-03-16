@@ -1,9 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react';
 import apiContext from '../context/apiContext.js';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const ProductListPage = () => {
     const [loading, setLoading] = useState(true);
     const context = useContext(apiContext);
+
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -17,7 +21,7 @@ const ProductListPage = () => {
         };
 
         fetchProducts();
-    }, [context]);
+    }, []);
 
     return (
         <div className="container mx-auto px-4 py-8 font-poppins">
@@ -35,10 +39,13 @@ const ProductListPage = () => {
                             <p className="text-gray-600">Price: ₹{product.price}</p>
                             <div className="flex justify-around">
                                 <div className="px-0.5 mx-auto my-1">
-                                    <button className="cursor-pointer font-ubuntu flex mx-auto text-white bg-indigo-600 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-800 rounded text-lg">Edit</button>
+                                    <Link to={`/admin/dashboard/updateproducts/${product._id}`} className='no-underline'><button className="cursor-pointer font-ubuntu flex mx-auto text-white bg-indigo-600 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-800 rounded text-lg">Edit</button></Link>
                                 </div>
                                 <div className="px-0.5 mx-auto my-1">
-                                    <button className="cursor-pointer font-ubuntu flex mx-auto text-white bg-red-600 border-0 py-2 px-6 focus:outline-none hover:bg-red-800 rounded text-lg">Delete</button>
+                                    <button onClick={async () => {
+                                        await context.deleteProduct(product._id)
+                                        toast.success("Deleted")
+                                    }} className="cursor-pointer font-ubuntu flex mx-auto text-white bg-red-600 border-0 py-2 px-6 focus:outline-none hover:bg-red-800 rounded text-lg">Delete</button>
                                 </div>
                             </div>
                         </div>
