@@ -1,7 +1,13 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { toast } from 'react-toastify'
 import axios from 'axios';
+import apiContext from '../context/apiContext';
 
 const AddProductPage = () => {
+    const token = localStorage.getItem('accessToken')
+    const context = useContext(apiContext)
+
+
     const [formData, setFormData] = useState({
         name: '',
         description: '',
@@ -21,11 +27,13 @@ const AddProductPage = () => {
     const handleSubmit = async e => {
         e.preventDefault();
         try {
-            await axios.post('/api/products/add', formData);
-            console.log('Product added successfully');
+
+            context.getAddProduct(formData, token)
+            toast.success('Product added successfully');
             // Optionally redirect or show a success message
         } catch (error) {
             console.error('Error adding product:', error);
+            toast.error('Error adding product');
             // Optionally show an error message
         }
     };

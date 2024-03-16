@@ -30,7 +30,7 @@ function App() {
         {/* all product page    buttons for update and delete product*/}
         <Route path='/admin/dashboard/allproducts' element={<><Dashboard /><ProductListPage /></>} />
         {/* add product  */}
-        <Route path='/admin/dashboard/addproducts' element={<><AddProductPage /></>} />
+        <Route path='/admin/dashboard/addproducts' element={<><Dashboard /><AddProductPage /></>} />
         {/* update product  */}
         <Route path='/admin/dashboard/updateproducts/:id' element={<><UpdateProduct /></>} />
       </Routes>

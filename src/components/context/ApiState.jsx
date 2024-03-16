@@ -7,6 +7,8 @@ const ApiState = (props) => {
 
     const [login, setLogin] = useState();
     const [signup, setSignup] = useState();
+    const [fetchAllProduct, setFetchAllProduct] = useState([])
+    const [addProduct, setAddProduct] = useState()
 
     const getLogin = async (loginData) => {
         try {
@@ -28,8 +30,40 @@ const ApiState = (props) => {
         }
     };
 
+    const getFetchAllProduct = async () => {
+        try {
+            const response = await axios.get(`${backendHost}/compass/api/v1/products`);
+            setFetchAllProduct(response.data);
+        } catch (error) {
+            console.error('Error fetching products:', error);
+        }
+    }
+
+    const getAddProduct = async (formData, token) => {
+
+        // Check if the user is logged in
+        if (!token) {
+            throw new Error('Not Allowed');
+        }
+
+        const config = {
+            headers: {
+                'x-access-token': token
+            }
+        }
+
+        try {
+            const res = await axios.post(`${backendHost}/compass/api/v1/admin/products/add`, formData, config)
+            setAddProduct(res.data)
+        } catch (error) {
+            console.error('Adding Product failed:', error);
+            throw new Error('Oops! Adding Product failed');
+
+        }
+    }
+
     return (
-        <apiContext.Provider value={{ login, signup, getLogin, getSignup }}>
+        <apiContext.Provider value={{ login, signup, fetchAllProduct, addProduct, getLogin, getSignup, getFetchAllProduct, getAddProduct }}>
             {props.children}
         </apiContext.Provider>
     );
