@@ -26,7 +26,7 @@ const ProfilePage = () => {
     }, []);
 
     return (
-        <div className="container mx-auto py-8">
+        <div className="container mx-auto py-8 font-poppins">
             <h1 className="text-2xl font-semibold mb-4">User Profile</h1>
             {user && (
                 <>
