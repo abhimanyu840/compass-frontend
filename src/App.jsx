@@ -12,8 +12,14 @@ import UpdateProduct from './components/admin/Updateproductevent'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ProfilePage from './components/consumer/Profilepage'
+import Products from './components/consumer/Products'
+import Productpage from './components/consumer/Productpage'
+import Paymentsuccess from './components/consumer/Paymentsuccess'
+import { useEffect, useState } from 'react'
 
 function App() {
+
+
 
   return (
     <>
@@ -35,6 +41,9 @@ function App() {
         {/* update product  */}
         <Route path='/admin/dashboard/updateproducts/:id' element={<><UpdateProduct /></>} />
         <Route path='/profile' element={<><ProfilePage /></>} />
+        <Route path='/allproducts' element={<Products />} />
+        <Route path='/product/:id' element={<Productpage />} />
+        <Route path='/paymentsuccess' element={<Paymentsuccess />} />
       </Routes>
     </>
   )

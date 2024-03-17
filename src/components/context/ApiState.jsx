@@ -11,6 +11,8 @@ const ApiState = (props) => {
     const [addProduct, setAddProduct] = useState()
     const [updateProduct, setUpdateProduct] = useState()
     const [singleProduct, setSingleProduct] = useState(null)
+    const [user, setUser] = useState()
+    const [createOrder, setCreateOrder] = useState()
 
     const clearPreviousData = () => {
         setSingleProduct(null)
@@ -121,8 +123,40 @@ const ApiState = (props) => {
         }
     }
 
+    const getUser = async (token) => {
+        if (!token) {
+            throw new Error('Not Logged In')
+        }
+
+        const config = {
+            headers: {
+                'x-access-token': token
+            }
+        }
+
+        try {
+            let res = await axios.get(`${process.env.REACT_APP_BACKEND_HOST}/compass/api/v1/auth/profile`, config)
+            setUser(res.data)
+        } catch (error) {
+            console.error('Failed to fetch user!', error);
+            throw new Error('Failed to fetch user!')
+        }
+    }
+
+    const getCreateOrder = async (data) => {
+        try {
+            let res = await axios.post(`${process.env.REACT_APP_BACKEND_HOST}/compass/api/v1/orders/create`, data)
+            setCreateOrder(res.data)
+
+        } catch (error) {
+            console.error('Failed to Create Order!', error);
+            throw new Error('Failed to create order!')
+
+        }
+    }
+
     return (
-        <apiContext.Provider value={{ login, signup, fetchAllProduct, addProduct, singleProduct, getLogin, getSignup, getFetchAllProduct, getAddProduct, getUpdateProduct, getSingleProduct, deleteProduct, clearPreviousData }}>
+        <apiContext.Provider value={{ login, signup, fetchAllProduct, addProduct, singleProduct, user, getLogin, getSignup, getFetchAllProduct, getAddProduct, getUpdateProduct, getSingleProduct, deleteProduct, clearPreviousData, getUser, getCreateOrder }}>
             {props.children}
         </apiContext.Provider>
     );

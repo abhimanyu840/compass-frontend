@@ -18,7 +18,7 @@ const UpdateProfileForm = ({ user }) => {
     };
 
     return (
-        <div className="my-8">
+        <div className="my-8 font-poppins rounded-lg border-gray-100 border-solid shadow-lg px-5 py-2">
             <h2 className="text-xl font-semibold mb-4">Update Profile Information</h2>
             <form onSubmit={handleSubmit} className="flex flex-col max-w-sm">
                 <label htmlFor="name" className="mb-2">Name</label>
