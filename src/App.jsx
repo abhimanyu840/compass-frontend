@@ -15,11 +15,11 @@ import ProfilePage from './components/consumer/Profilepage'
 import Products from './components/consumer/Products'
 import Productpage from './components/consumer/Productpage'
 import Paymentsuccess from './components/consumer/Paymentsuccess'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
+import apiContext from './components/context/apiContext'
+import axios from 'axios'
 
 function App() {
-
-
 
   return (
     <>

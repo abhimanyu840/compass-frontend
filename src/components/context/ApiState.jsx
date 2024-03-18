@@ -13,6 +13,7 @@ const ApiState = (props) => {
     const [singleProduct, setSingleProduct] = useState(null)
     const [user, setUser] = useState()
     const [createOrder, setCreateOrder] = useState()
+    const [admin, setAdmin] = useState(false)
 
     const clearPreviousData = () => {
         setSingleProduct(null)
@@ -155,8 +156,15 @@ const ApiState = (props) => {
         }
     }
 
+    const getAdmin = (token) => {
+        (async () => {
+            await getUser(token)
+            user.userType == 'ADMIN' && setAdmin(true)
+        })()
+    }
+
     return (
-        <apiContext.Provider value={{ login, signup, fetchAllProduct, addProduct, singleProduct, user, getLogin, getSignup, getFetchAllProduct, getAddProduct, getUpdateProduct, getSingleProduct, deleteProduct, clearPreviousData, getUser, getCreateOrder }}>
+        <apiContext.Provider value={{ login, signup, fetchAllProduct, addProduct, singleProduct, user, createOrder, admin, getLogin, getSignup, getFetchAllProduct, getAddProduct, getUpdateProduct, getSingleProduct, deleteProduct, clearPreviousData, getUser, getCreateOrder, getAdmin }}>
             {props.children}
         </apiContext.Provider>
     );

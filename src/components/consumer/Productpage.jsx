@@ -9,7 +9,7 @@ const Productpage = () => {
     const [product, setProduct] = useState(null);
     const { id } = useParams();
     const context = useContext(apiContext)
-    const { user, getUser, getCreateOrder } = context
+    const { user, getUser, createOrder, getCreateOrder } = context
 
     const token = localStorage.getItem('accessToken')
 
@@ -59,23 +59,29 @@ const Productpage = () => {
 
     const handleCheckout = async (amount) => {
         const { data: { key } } = await axios.get(`${process.env.REACT_APP_BACKEND_HOST}/compass/api/v1/getkey`)
-        console.log(key)
-        // const { data: { order } } = await axios.post(`${process.env.REACT_APP_BACKEND_HOST}/compass/api/v1/payment/checkout`, { amount:amount })
         const { data: { order } } = await axios.post(`${process.env.REACT_APP_BACKEND_HOST}/compass/api/v1/payment/checkout`, { amount })
         var options = {
-            key: key, // Enter the Key ID generated from the Dashboard
-            amount: order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+            key: key,
+            amount: order.amount,
             currency: "INR",
             name: "The Investment Compass",
             description: "Transaction for The Investment Compass",
             image: 'https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=206,fit=crop,q=95/mv0lPzzqwRuz2ZE5/new-project-12-1-Yle54ojpjnt6QxDV.png',
-            order_id: order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+            order_id: order.id,
+            redirect: false,
             callback_url: `${process.env.REACT_APP_BACKEND_HOST}/compass/api/v1/payment/paymentVerification`,
+            callback_url: await axios.post(`${process.env.REACT_APP_BACKEND_HOST}/compass/api/v1/orders/create`, {
+                userId: user.userId,
+                productId: product._id,
+                totalPrice: product.price,
+                status: "completed"
+            }),
             prefill: {
                 name: user.name,
                 email: user.email,
                 contact: user.mobileNo
             },
+            redirect: false,
             notes: {
                 "address": "Razorpay Corporate Office"
             },
@@ -85,8 +91,6 @@ const Productpage = () => {
         };
         const razor = new window.Razorpay(options);
         razor.open();
-
-
     }
 
     return (
