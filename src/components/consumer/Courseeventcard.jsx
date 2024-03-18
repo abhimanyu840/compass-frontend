@@ -5,7 +5,6 @@ const Card = ({ product }) => {
     return (
         <>
             <div className="p-4 md:w-1/4">
-                {console.log(product,'product')}
                 <div className="h-full border-2 border-gray-200 border-opacity-60 rounded-lg overflow-hidden shadow-xl">
                     <img className="lg:h-48 md:h-36 w-full object-cover object-center" src={product.imageUrl} alt="blog" />
                     <div className="p-3">
