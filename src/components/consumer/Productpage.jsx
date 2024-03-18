@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import apiContext from '../context/apiContext';
@@ -9,27 +9,10 @@ const Productpage = () => {
     const [product, setProduct] = useState(null);
     const { id } = useParams();
     const context = useContext(apiContext)
-    const { user, getUser, createOrder, getCreateOrder } = context
+    const { user, getUser } = context
 
     const token = localStorage.getItem('accessToken')
-
-
-
-    // const createOrder = async () => {
-    //     const data = {
-    //         userId: user.userId,
-    //         productId: product._id,
-    //         totalPrice: product.price,
-    //         status: "completed"
-    //     }
-    //     await getCreateOrder(data)
-    // }
-
-    // createOrder()
-    // toast.success("Order Completed")
-
-    // and in callback url TO TRY 
-
+    const ref = useRef()
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -37,6 +20,7 @@ const Productpage = () => {
                 const response = await axios.get(`${process.env.REACT_APP_BACKEND_HOST}/compass/api/v1/products/${id}`);
                 const { data } = response;
                 const parsedProduct = {
+                    _id: data._id,
                     name: data.name,
                     description: data.description,
                     price: data.price,
@@ -69,13 +53,22 @@ const Productpage = () => {
             image: 'https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=206,fit=crop,q=95/mv0lPzzqwRuz2ZE5/new-project-12-1-Yle54ojpjnt6QxDV.png',
             order_id: order.id,
             redirect: false,
-            callback_url: `${process.env.REACT_APP_BACKEND_HOST}/compass/api/v1/payment/paymentVerification`,
-            callback_url: await axios.post(`${process.env.REACT_APP_BACKEND_HOST}/compass/api/v1/orders/create`, {
-                userId: user.userId,
-                productId: product._id,
-                totalPrice: product.price,
-                status: "completed"
-            }),
+            // callback_url: `${process.env.REACT_APP_BACKEND_HOST}/compass/api/v1/payment/paymentVerification` ,
+            handler: async function (response) {
+                await axios.post(`${process.env.REACT_APP_BACKEND_HOST}/compass/api/v1/payment/paymentVerification`, {
+                    razorpay_order_id: response.razorpay_order_id,
+                    razorpay_payment_id: response.razorpay_payment_id,
+                    razorpay_signature: response.razorpay_signature,
+                })
+            },
+            handler: async function () {
+                await axios.post(`${process.env.REACT_APP_BACKEND_HOST}/compass/api/v1/orders/create`, {
+                    userId: user.userId,
+                    productId: product._id,
+                    totalPrice: product.price,
+                    status: "completed"
+                })
+            },
             prefill: {
                 name: user.name,
                 email: user.email,
@@ -93,6 +86,30 @@ const Productpage = () => {
         razor.open();
     }
 
+    let buyedProductId
+
+    // useEffect(() => {
+    //     const fetchBuyed = async () => {
+    //         let res = await axios.get(`${process.env.REACT_APP_BACKEND_HOST}/compass/api/v1/orders/${user?.userId}`)
+    //         const buyedItem = res.data
+    //         Array.from(buyedItem, item => buyedProductId = item._id)
+
+    //         if (buyedProductId == product._id) {
+    //             ref.current.disabled = true
+    //         } else {
+    //             ref.current.disabled = false
+
+    //         }
+    //         console.log(ref.current.disabled)
+    //         console.log(buyedProductId)
+    //     }
+    //     fetchBuyed()
+    // }, [product])
+
+
+
+
+
     return (
         <div>
             {product ? (
@@ -109,7 +126,8 @@ const Productpage = () => {
                                 </>}
                                 <div className="flex flex-wrap mt-6 items-center pb-5 border-b-2 border-gray-100 mb-5">
                                     <span className="title-font font-medium text-2xl text-gray-900">Price: ₹{product.price}</span>
-                                    <button onClick={() => handleCheckout(product.price)} className="ml-auto text-lg font-ubuntu text-white bg-indigo-600 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-800 rounded cursor-pointer">Register Now</button>
+                                    <button ref={ref} disabled={false} onClick={() => handleCheckout(product.price)} className="ml-auto text-lg font-ubuntu text-white bg-indigo-600 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-800 rounded cursor-pointer">Register Now</button>
+                                    {/* <button className="ml-auto text-lg font-ubuntu text-white bg-indigo-600 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-800 rounded cursor-pointer">Explore</button> */}
                                 </div>
                             </div>
                         </div>

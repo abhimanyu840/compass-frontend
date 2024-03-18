@@ -10,7 +10,6 @@ const OrderList = ({ userId }) => {
             try {
                 let res = await axios.get(`${process.env.REACT_APP_BACKEND_HOST}/compass/api/v1/orders/${userId}`)
                 setOrders(res.data)
-                console.log(orders)
             } catch (error) {
                 console.log('Error fetching user data', error)
             }

@@ -20,26 +20,45 @@ import apiContext from './components/context/apiContext'
 import axios from 'axios'
 
 function App() {
+  const [isAdmin, setIsAdmin] = useState(false)
+  const token = localStorage.accessToken
+
+
+
+  useEffect(() => {
+
+    (async () => {
+      const config = {
+        headers: {
+          'x-access-token': token
+        }
+      }
+      let res = await axios.get(`${process.env.REACT_APP_BACKEND_HOST}/compass/api/v1/auth/profile`, config)
+      res.data.userType == 'ADMIN' && setIsAdmin(true)
+
+    })()
+  }, [])
+
 
   return (
     <>
       <Navbar />
       <ToastContainer />
       <Routes>
-        <Route path='/' element={<Home />} />
+        <Route path='/' element={<Home admin={isAdmin} />} />
         <Route path='/login' element={<Login />} />
         <Route path='/signup' element={<Signup />} />
-        <Route path='/admin/dashboard' element={<Dashboard />} />
+        {isAdmin && <Route path='/admin/dashboard' element={<Dashboard />} />}
         {/* sales page  */}
-        <Route path='/admin/dashboard/sales' element={<><Dashboard /><SalesPage /></>} />
-        <Route path='/admin/dashboard/orders' element={<><Dashboard /><OrdersPage /></>} />
+        {isAdmin && <Route path='/admin/dashboard/sales' element={<><Dashboard /><SalesPage /></>} />}
+        {isAdmin && <Route path='/admin/dashboard/orders' element={<><Dashboard /><OrdersPage /></>} />}
 
         {/* all product page    buttons for update and delete product*/}
-        <Route path='/admin/dashboard/allproducts' element={<><Dashboard /><ProductListPage /></>} />
+        {isAdmin && <Route path='/admin/dashboard/allproducts' element={<><Dashboard /><ProductListPage /></>} />}
         {/* add product  */}
-        <Route path='/admin/dashboard/addproducts' element={<><Dashboard /><AddProductPage /></>} />
+        {isAdmin && <Route path='/admin/dashboard/addproducts' element={<><Dashboard /><AddProductPage /></>} />}
         {/* update product  */}
-        <Route path='/admin/dashboard/updateproducts/:id' element={<><UpdateProduct /></>} />
+        {isAdmin && <Route path='/admin/dashboard/updateproducts/:id' element={<><UpdateProduct /></>} />}
         <Route path='/profile' element={<><ProfilePage /></>} />
         <Route path='/allproducts' element={<Products />} />
         <Route path='/product/:id' element={<Productpage />} />

@@ -3,7 +3,7 @@ import Card from './Courseeventcard'
 import { Link } from 'react-router-dom'
 import apiContext from '../context/apiContext'
 
-const Home = () => {
+const Home = ({ admin }) => {
     return (
         <>
             <div className='container font-poppins mx-4 '>
@@ -23,7 +23,7 @@ const Home = () => {
                         <button className=" cursor-pointer font-ubuntu flex mx-auto mt-16 text-white bg-indigo-600 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-800 rounded text-lg"><Link to={'/allproducts'} className='no-underline text-white'>Explore Products</Link></button>
                     </div>
                     <div className="px-2 mx-auto my-2 ">
-                        {<button className=" cursor-pointer font-ubuntu flex mx-auto mt-16 text-white bg-indigo-600 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-800 rounded text-lg"><Link to={'/admin/dashboard'} className='no-underline text-white'>Admin Dashboard</Link></button>}
+                        {admin && <button className=" cursor-pointer font-ubuntu flex mx-auto mt-16 text-white bg-indigo-600 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-800 rounded text-lg"><Link to={'/admin/dashboard'} className='no-underline text-white'>Admin Dashboard</Link></button>}
                     </div>
                 </section>
 
