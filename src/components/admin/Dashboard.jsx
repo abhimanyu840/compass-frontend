@@ -15,15 +15,12 @@ const Dashboard = () => {
         <>
             <h2 className='font-madimi-one text-center text-4xl underline text-green-800'>Dashboard</h2>
 
-            <div className="flex">
+            <div className=" flex flex-col md:flex-row gap-2 ">
 
 
-                {/* Display sales statistics */}
                 <div className="px-2 mx-auto my-0.5 ">
                     <Link to={`/admin/dashboard/sales`} className='no-underline'><button onClick={handleClick} className=" cursor-pointer font-ubuntu flex mx-auto text-white bg-indigo-600 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-800 rounded text-lg">Display Sales</button></Link>
-
                 </div>
-                {/* Display order details */}
                 <div className="px-2 mx-auto my-0.5 ">
                     <Link to={`/admin/dashboard/orders`} className='no-underline'><button className=" cursor-pointer font-ubuntu flex mx-auto text-white bg-indigo-600 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-800 rounded text-lg">Display Orders</button></Link>
                 </div>

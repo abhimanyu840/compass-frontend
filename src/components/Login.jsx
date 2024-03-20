@@ -28,7 +28,8 @@ const Login = () => {
             if (accessToken) {
                 localStorage.setItem('accessToken', accessToken);
                 toast.success('Logged In successfully');
-                navigate('/');
+                navigate("/");
+                // location.reload()
             } else {
                 toast.error('Login failed. Please try again.'); // Handle login failure
             }

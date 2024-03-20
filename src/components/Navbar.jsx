@@ -23,7 +23,7 @@ const Navbar = () => {
 
 
     return (
-        <div className='backdrop-blur-md z-10 w-full sticky top-0 bg-white'>
+        <div className='backdrop-blur-md z-10 w-full sticky top-0 bg-purple-100'>
             <header className="text-gray-600 body-font shadow-lg">
                 <div className="container mx-auto flex flex-wrap p-5 px-2 flex-col md:flex-row items-center justify-between">
                     <div className="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
@@ -63,8 +63,8 @@ const Navbar = () => {
                         {/* <Link to={'/about'} className="mr-5 hover:text-gray-900 no-underline font-black text-black">About</Link>
                         <Link to={'/contact'} className="mr-5 hover:text-gray-900 no-underline font-black text-black">Contact</Link> */}
                         {isLoggedIn ? (
-                            <div className="relative">
-                                <FaUserCircle onClick={() => setShowDropdown(!showDropdown)} className="text-xl text-gray-700 cursor-pointer hover:text-gray-900 mx-2" />
+                            <div className="mr-5">
+                                <FaUserCircle onClick={() => setShowDropdown(!showDropdown)} className="text-xl text-gray-700 cursor-pointer hover:text-gray-900 mx-2 ml-3" />
                                 {showDropdown && (
                                     <div className="absolute right-0 mt-2 bg-white border border-gray-200 rounded-md shadow-lg cursor-pointer">
                                         <button onClick={logout} className=" w-full py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 flex items-center"><MdLogout className='ml-1 text-blue-800' />Logout</button>

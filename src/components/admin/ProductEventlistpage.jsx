@@ -29,10 +29,10 @@ const ProductListPage = () => {
             {loading ? (
                 <p className="text-gray-600">Loading products...</p>
             ) : (
-                <div className="grid grid-cols-3 gap-4">
+                <div className="flex flex-wrap  ">
                     {context.fetchAllProduct.map(product => (
-                        <div key={product._id} className="border shadow-lg border-gray-600 rounded p-4">
-                            <img className="lg:h-48 md:h-36 w-full object-cover object-center" src={product.imageUrl} alt="blog" />
+                        <div key={product._id} className=" border shadow-lg border-gray-600 rounded p-4">
+                            <img className="lg:h-48 md:h-36  w-full object-cover object-center" src={product.imageUrl} alt="blog" />
                             <p className="text-gray-600">Type: {product.type}</p>
                             <h3 className="text-lg font-semibold mb-2">Name: {product.name}</h3>
                             <p className="text-gray-600">Description: {product.description}</p>
